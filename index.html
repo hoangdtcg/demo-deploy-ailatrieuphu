@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ai là Triệu Phú</title>
+    <script src="js/Quiz.js"></script>
+    <script src="js/GameManager.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="quiz">
+    <div id="question"></div>
+    <button class="ans" onclick="chooseAns(this.id)" id="ans-1">1</button>
+    <button class="ans" onclick="chooseAns(this.id)" id="ans-2">2</button>
+    <button class="ans" onclick="chooseAns(this.id)" id="ans-3">3</button>
+    <button class="ans" onclick="chooseAns(this.id)" id="ans-4">4</button>
+</div>
+<button onclick="nextQuiz()" id="next">Next Quiz</button>
+<button id="restart">Reset Quiz</button>
+
+<script>
+    let quiz1 = new Quiz("Ai la người đẹp trai nhất C1020G",['Dương Chử','Lớp trưởng', 'Mừng','Quỳnh Búp Pê'],'Quỳnh Búp Pê');
+    let quiz2 = new Quiz("Ai sẽ phải học lại Module 1",['Bách','Toàn', 'Phan Thế Kỷ','Cả lớp đi tiếp'],'Cả lớp đi tiếp');
+    let quiz3= new Quiz("Hôm nay là thứ mấy?",['Chắc chắn là thứ 2','Thứ 3 rồi', 'Cuối tuần rồi','Không biết'],'Thứ 3 rồi');
+
+    let gameManager = new GameManager(3);
+    gameManager.addQuiz(quiz1);
+    gameManager.addQuiz(quiz2);
+    gameManager.addQuiz(quiz3);
+
+    console.log(gameManager);
+
+    function displayQuiz(index) {
+        console.log(gameManager.quizs[index].answer);
+        document.getElementById('question').innerHTML = gameManager.quizs[index].question;
+        // document.getElementById('ans-1').innerHTML = gameManager.quizs[index].question;
+        for (let i = 1; i <= gameManager.quizs[index].answer.length; i++) {
+            document.getElementById('ans-'+i).innerHTML = gameManager.quizs[index].answer[i-1];
+        }
+    }
+
+    function nextQuiz(){ //Đổi câu hỏi
+        gameManager.nextQuiz();
+        displayQuiz(gameManager.current);
+    }
+
+    function endGame() {
+        gameManager.endGame();
+        displayQuiz(gameManager.current);
+    }
+
+    function chooseAns(id){
+        let ans = document.getElementById(id).innerHTML;
+        gameManager.chooseAnswer(ans);
+        if(gameManager.checkAnswer(ans)){
+            nextQuiz();
+        }else {
+            endGame();
+        }
+    }
+
+    displayQuiz(0);
+
+</script>
+</body>
+</html>
